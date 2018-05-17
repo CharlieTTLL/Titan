@@ -257,14 +257,14 @@
 	 * @param errorHandler -
 	 *            This is the failed callback
 	 */
-	function ajax(method, url, data, callback, errorHandler) {
+	function ajax(method, url, data, callback, errorHandler) {	//update part of XML page not entire, all
 		var xhr = new XMLHttpRequest();
 
-		xhr.open(method, url, true);
+		xhr.open(method, url, true);	//true ->> async 
 
-		xhr.onload = function() {
+		xhr.onload = function() { //callback function(), happen after all data done
 			if (xhr.status === 200) {
-				callback(xhr.responseText);
+				callback(xhr.responseText);	//callback function() in parameter
 			} else if (xhr.status === 403) {
 				onSessionInvalid();
 			} 

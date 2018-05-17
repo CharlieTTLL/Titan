@@ -5,7 +5,7 @@ import db.mysql.MySQLConnection;
 
 public class DBConnectionFactory {
 	// This should change based on the pipeline.
-	private static final String DEFAULT_DB = "mysql";
+	private static final String DEFAULT_DB = "mongodb";
 
 	// Create a DBConnection based on given db type.
 	public static DBConnection getDBConnection(String db) {

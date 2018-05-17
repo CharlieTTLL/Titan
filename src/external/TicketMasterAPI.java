@@ -26,22 +26,29 @@ public class TicketMasterAPI {
 			term = DEFAULT_TERM;
 		}
 		try {
+			//Uniform data to UTF-8
 			term = java.net.URLEncoder.encode(term, "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		String geoHash = GeoHash.encodeGeohash(lat, lon, 8);
-		// apikey=12345&geoPoint=abcd&keyword=music&radius=50
+		//apikey=12345&geoPoint=abcd&keyword=music&radius=50 ---> String query
 		String query = String.format("apikey=%s&geoPoint=%s&keyword=%s&radius=%s", API_KEY, geoHash, term, 50);
 
 		try {
 			HttpURLConnection connection = (HttpURLConnection) new URL(URL + "?" + query).openConnection();
 			connection.setRequestMethod("GET");
 
-			int responseCode = connection.getResponseCode();// 返回结果并发送请求
+			//return response code > 400 failed
+			int responseCode = connection.getResponseCode();
 			System.out.println("ResponseCode: " + responseCode);
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));//转化为BufferedReader，因为这个类里面能用readLine()
+			
+			/*
+			 * we could read line by line using BufferedReader
+			 * InputStreamReader is like a device that could make us read data from InputStream
+			 * Using StringBuilder because it is easy to append string
+			 * */
+			BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			StringBuilder response = new StringBuilder();
 			String line = "";
 			while ((line = in.readLine()) != null) {
@@ -52,8 +59,10 @@ public class TicketMasterAPI {
 			if (obj.isNull("_embedded")) {
 				return new ArrayList<>();
 			}
+			//get corresponding JSONOject and JSONArray from TicketMaster API
 			JSONObject embedded = obj.getJSONObject("_embedded");
 			JSONArray events = (JSONArray) embedded.get("events");
+			//return data format we customized
 			return getItemList(events);
 
 		} catch (Exception e) {
