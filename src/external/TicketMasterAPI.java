@@ -80,7 +80,10 @@ public class TicketMasterAPI {
 			if (!embedded.isNull("venues")) {
 				JSONArray venues = embedded.getJSONArray("venues");
 				if (venues.length() > 0) {
-					//虽然是一个array，但只能去array的第一个值，后面的无效
+					/*
+					 * Although it is a array, we just need to get array[0]
+					 * And don't care any other element in array
+					 */
 					return venues.getJSONObject(0);
 				}
 			}
@@ -88,6 +91,7 @@ public class TicketMasterAPI {
 		return null;
 	}
 
+	//get item image url --> return url string
 	private String getImageUrl(JSONObject event) throws JSONException {
 		if (!event.isNull("images")) {
 			JSONArray array = event.getJSONArray("images");
@@ -101,6 +105,7 @@ public class TicketMasterAPI {
 		return null;
 	}
 
+	//get category of item --> should be Set<String>
 	private Set<String> getCategories(JSONObject event) throws JSONException {
 		if (!event.isNull("classifications")) {
 			JSONArray array = event.getJSONArray("classifications");
@@ -188,6 +193,7 @@ public class TicketMasterAPI {
 		}
 	}
 
+	//main function user hardcode to test
 	public static void main(String[] args) {
 		TicketMasterAPI tmApi = new TicketMasterAPI();
 		// Mountain View, CA
